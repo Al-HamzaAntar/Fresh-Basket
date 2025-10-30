@@ -1,5 +1,6 @@
 "use client";
 import { useState } from "react";
+import type { FormEvent } from "react";
 import { useAuth } from "../../providers";
 import Link from "next/link";
 import { UserPlus, Mail, User, Phone, MapPin, Lock, ArrowRight } from "lucide-react";
@@ -11,7 +12,7 @@ export default function RegisterPage() {
 	const [error, setError] = useState<string | null>(null);
 	const [ok, setOk] = useState(false);
 
-	const onSubmit = async (e: React.FormEvent) => {
+	const onSubmit = async (e: FormEvent) => {
 		e.preventDefault();
 		setError(null);
 		
@@ -31,13 +32,14 @@ export default function RegisterPage() {
 			setTimeout(() => {
 				window.location.href = "/";
 			}, 1500);
-		} catch (err: any) {
-			setError(err?.message ?? "حدث خطأ");
+		} catch (err: unknown) {
+			const message = err instanceof Error ? err.message : String(err ?? "حدث خطأ");
+			setError(message);
 		}
 	};
 
 	return (
-		<div className="min-h-screen bg-gradient-to-br from-emerald-50 via-white to-green-50 py-12">
+		<div className="min-h-screen bg-linear-to-br from-emerald-50 via-white to-green-50 py-12">
 			<div className="mx-auto max-w-md px-6">
 				<Link href="/" className="inline-flex items-center gap-2 text-sm font-medium text-gray-600 transition-colors hover:text-emerald-600 mb-8">
 					<ArrowRight className="h-4 w-4" />

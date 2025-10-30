@@ -3,9 +3,17 @@ import { useCart } from "../providers";
 import Link from "next/link";
 import Image from "next/image";
 import { ShoppingCart, Trash2, ArrowRight, Package, CheckCircle } from "lucide-react";
+import { useEffect, useState } from "react";
 
 export default function CartPage() {
 	const { items, total, remove, clear } = useCart();
+	const [mounted, setMounted] = useState(false);
+	useEffect(() => setMounted(true), []);
+
+	// Avoid SSR/CSR mismatch by rendering after mount
+	if (!mounted) {
+		return null;
+	}
 
 	return (
 		<div className="min-h-screen bg-gradient-to-br from-emerald-50 via-white to-green-50 py-12">

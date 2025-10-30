@@ -3,6 +3,7 @@ import Image from "next/image";
 import Link from "next/link";
 import { Leaf, ShoppingCart, ArrowRight, Sparkles } from "lucide-react";
 import { useCart } from "../providers";
+import { useEffect, useState } from "react";
 
 const vegetables = [
 	{ id: "v1", name: "جزر عضوي", price: 0.99, unit: "/كجم", image: "https://images.unsplash.com/photo-1598170845058-32b9d6a5da37?w=500&h=500&fit=crop" },
@@ -32,6 +33,8 @@ const vegetables = [
 export default function VegetablesPage() {
 	const { add, items } = useCart();
 	const cartItemsCount = items.reduce((sum, item) => sum + item.qty, 0);
+	const [mounted, setMounted] = useState(false);
+	useEffect(() => setMounted(true), []);
 
 	return (
 		<div className="min-h-screen bg-gradient-to-br from-emerald-50 via-white to-green-50">
@@ -58,8 +61,8 @@ export default function VegetablesPage() {
 						<Link href="/cart" className="relative flex items-center gap-2 rounded-full bg-emerald-600 px-5 py-2.5 text-sm font-medium text-white shadow-lg shadow-emerald-200 transition-all hover:bg-emerald-700">
 							<ShoppingCart className="h-4 w-4" />
 							<span className="hidden sm:inline">السلة</span>
-							{cartItemsCount > 0 && (
-								<span className="absolute -top-1 -right-1 flex h-5 w-5 items-center justify-center rounded-full bg-red-500 text-xs font-bold text-white">
+							{mounted && cartItemsCount > 0 && (
+								<span className="absolute -top-1 -right-1 flex h-5 w-5 items-center justify-center rounded-full bg-red-500 text-xs font-bold text-white" suppressHydrationWarning>
 									{cartItemsCount}
 								</span>
 							)}

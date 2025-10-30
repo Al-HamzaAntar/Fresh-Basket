@@ -1,7 +1,9 @@
 "use client";
 import Image from "next/image";
+import Link from "next/link";
 import { Leaf, ShoppingCart, Sparkles, Tag, Menu, User } from "lucide-react";
 import { useCart } from "./providers";
+import { useEffect, useState } from "react";
 
 const products = [
 	{ 
@@ -65,6 +67,8 @@ const products = [
 export default function Home() {
 	const { add, items } = useCart();
 	const cartItemsCount = items.reduce((sum, item) => sum + item.qty, 0);
+	const [mounted, setMounted] = useState(false);
+	useEffect(() => setMounted(true), []);
 	
 	return (
 		<div className="min-h-screen bg-gradient-to-br from-emerald-50 via-white to-green-50 text-[color:var(--foreground)]">
@@ -84,31 +88,31 @@ export default function Home() {
 					</div>
 					
 					<nav className="hidden gap-8 text-sm font-medium md:flex">
-						<a href="#new" className="flex items-center gap-2 text-gray-700 transition-colors hover:text-emerald-600">
+						<Link href="/new" className="flex items-center gap-2 text-gray-700 transition-colors hover:text-emerald-600">
 							<Sparkles className="h-4 w-4" />
 							الجديد
-						</a>
-						<a href="/fruits" className="text-gray-700 transition-colors hover:text-emerald-600">فواكه</a>
-						<a href="/vegetables" className="text-gray-700 transition-colors hover:text-emerald-600">خضروات</a>
-						<a href="#deals" className="flex items-center gap-2 text-gray-700 transition-colors hover:text-emerald-600">
+						</Link>
+						<Link href="/fruits" className="text-gray-700 transition-colors hover:text-emerald-600">فواكه</Link>
+						<Link href="/vegetables" className="text-gray-700 transition-colors hover:text-emerald-600">خضروات</Link>
+						<Link href="/deals" className="flex items-center gap-2 text-gray-700 transition-colors hover:text-emerald-600">
 							<Tag className="h-4 w-4" />
 							العروض
-						</a>
+						</Link>
 					</nav>
 					
 					<div className="flex items-center gap-3">
-						<a href="/profile" className="hidden sm:flex items-center justify-center h-10 w-10 rounded-full bg-gray-100 text-gray-700 transition-all hover:bg-emerald-100 hover:text-emerald-600">
+						<Link href="/profile" className="hidden sm:flex items-center justify-center h-10 w-10 rounded-full bg-gray-100 text-gray-700 transition-all hover:bg-emerald-100 hover:text-emerald-600">
 							<User className="h-5 w-5" />
-						</a>
-						<a href="/cart" className="relative flex items-center gap-2 rounded-full bg-emerald-600 px-5 py-2.5 text-sm font-medium text-white shadow-lg shadow-emerald-200 transition-all hover:bg-emerald-700 hover:shadow-xl">
+						</Link>
+						<Link href="/cart" className="relative flex items-center gap-2 rounded-full bg-emerald-600 px-5 py-2.5 text-sm font-medium text-white shadow-lg shadow-emerald-200 transition-all hover:bg-emerald-700 hover:shadow-xl">
 							<ShoppingCart className="h-4 w-4" />
 							<span className="hidden sm:inline">السلة</span>
-							{cartItemsCount > 0 && (
-								<span className="absolute -top-1 -right-1 flex h-5 w-5 items-center justify-center rounded-full bg-red-500 text-xs font-bold text-white">
+							{mounted && cartItemsCount > 0 && (
+								<span className="absolute -top-1 -right-1 flex h-5 w-5 items-center justify-center rounded-full bg-red-500 text-xs font-bold text-white" suppressHydrationWarning>
 									{cartItemsCount}
 								</span>
 							)}
-						</a>
+						</Link>
 						<button className="flex md:hidden items-center justify-center h-10 w-10 rounded-full bg-gray-100">
 							<Menu className="h-5 w-5" />
 						</button>
@@ -137,10 +141,10 @@ export default function Home() {
 								تسوق الآن
 								<ShoppingCart className="h-5 w-5" />
 							</a>
-							<a href="#deals" className="inline-flex items-center gap-2 rounded-full border-2 border-white/50 bg-white/10 px-8 py-4 text-base font-semibold text-white backdrop-blur-sm transition-all hover:bg-white/20">
+							<Link href="/deals" className="inline-flex items-center gap-2 rounded-full border-2 border-white/50 bg-white/10 px-8 py-4 text-base font-semibold text-white backdrop-blur-sm transition-all hover:bg-white/20">
 								<Tag className="h-5 w-5" />
 								استكشف العروض
-							</a>
+							</Link>
 						</div>
 					</div>
 				</section>

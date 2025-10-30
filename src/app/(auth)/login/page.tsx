@@ -1,5 +1,6 @@
 "use client";
 import { useState } from "react";
+import type { FormEvent } from "react";
 import { useAuth } from "../../providers";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
@@ -10,14 +11,16 @@ export default function LoginPage() {
 	const [form, setForm] = useState({ email: "", password: "" });
 	const [error, setError] = useState<string | null>(null);
 
-	const onSubmit = async (e: React.FormEvent) => {
+	const onSubmit = async (e: FormEvent) => {
 		e.preventDefault();
 		setError(null);
 		try {
 			await login(form.email, form.password);
 			router.push("/profile");
-		} catch (err: any) {
-			setError(err?.message ?? "حدث خطأ");
+		} catch (err: unknown) {
+			// Handle unknown errors in a type-safe way
+			const message = err instanceof Error ? err.message : String(err ?? "حدث خطأ");
+			setError(message);
 		}
 	};
 
@@ -30,7 +33,7 @@ export default function LoginPage() {
 				<button type="submit" className="w-full rounded-full px-5 py-2 text-white" style={{backgroundColor: "var(--brand)"}}>دخول</button>
 				{error ? <p className="text-sm text-red-600">{error}</p> : null}
 			</form>
-			<p className="mt-4 text-sm">مستخدم جديد؟ <Link href="/register" className="text-[color:var(--brand-700)] underline">إنشاء حساب</Link></p>
+			<p className="mt-4 text-sm">مستخدم جديد؟ <Link href="/register" className="text-(--brand-700) underline">إنشاء حساب</Link></p>
 		</div>
 	);
 }

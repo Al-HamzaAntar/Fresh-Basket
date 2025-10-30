@@ -1,16 +1,24 @@
 "use client";
 import { useAuth } from "../providers";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import Link from "next/link";
 import { User, Mail, Phone, MapPin, Save, LogOut, ArrowRight, Shield } from "lucide-react";
 
 export default function ProfilePage() {
 	const { user, updateProfile, logout } = useAuth();
 	const [form, setForm] = useState({ name: user?.name ?? "", phone: user?.phone ?? "", address: user?.address ?? "" });
+	const [mounted, setMounted] = useState(false);
+	useEffect(() => {
+		// Defer setting mounted to avoid synchronous setState inside effect
+		const id = setTimeout(() => setMounted(true), 0);
+		return () => clearTimeout(id);
+	}, []);
+
+	if (!mounted) return null;
 
 	if (!user) {
 		return (
-			<div className="min-h-screen bg-gradient-to-br from-emerald-50 via-white to-green-50 py-12">
+			<div className="min-h-screen bg-linear-to-br from-emerald-50 via-white to-green-50 py-12">
 				<div className="mx-auto max-w-md px-6">
 					<div className="rounded-2xl bg-white p-8 shadow-xl text-center">
 						<div className="mx-auto flex h-20 w-20 items-center justify-center rounded-full bg-emerald-100 mb-6">
@@ -27,8 +35,8 @@ export default function ProfilePage() {
 		);
 	}
 
-	return (
-		<div className="min-h-screen bg-gradient-to-br from-emerald-50 via-white to-green-50 py-12">
+		return (
+			<div className="min-h-screen bg-linear-to-br from-emerald-50 via-white to-green-50 py-12">
 			<div className="mx-auto max-w-2xl px-6">
 				<div className="mb-8 flex items-center gap-3">
 					<Link href="/" className="flex h-10 w-10 items-center justify-center rounded-full bg-white shadow-md transition-all hover:bg-emerald-50">
@@ -44,7 +52,7 @@ export default function ProfilePage() {
 				</div>
 
 				{/* User Info Card */}
-				<div className="mb-6 rounded-2xl bg-gradient-to-br from-emerald-500 to-green-600 p-8 shadow-2xl">
+				<div className="mb-6 rounded-2xl bg-linear-to-br from-emerald-500 to-green-600 p-8 shadow-2xl">
 					<div className="flex items-center gap-4 mb-4">
 						<div className="flex h-16 w-16 items-center justify-center rounded-full bg-white/20 backdrop-blur-sm">
 							<User className="h-8 w-8 text-white" />
